@@ -11,6 +11,12 @@ class Rating extends Connection
         parent::__construct();
     }
 
+    /* GETTTERS */
+    function getWorkers()
+    {
+        return $this->workers;
+    }
+
     // WIP 0.5pto
     function getAllWorkers()
     {
@@ -63,19 +69,19 @@ class Rating extends Connection
     function drawWorkersList()
     {
         $output = "";
-        foreach ($this->workers as $client) {
-            $output .= "<tr>";
-            $output .= "    <td>" . $client->getId() . "</td>";
-            $output .= "    <td><a href='detalle.php?id=" . $client->getId() . "'>" . $client->getCompany() . "</a></td>";
-            $output .= "    <td>" . number_format(intval($client->getInvestment()), 2, "'", ".") . " €</td>";
-            $output .= "    <td>" . date("F d, Y", strtotime($client->getDate())) . "</td>";
-            $output .= "    <td>";
-            $output .= ($client->getActive()) ?
-                "<img src='img/img05.gif'>" :
-                "<img src='img/img06.gif'>";
-            $output .= "    </td>";
-            $output .=     "<td><a href='delete.php?id=" . $client->getId() . "'><img src='img/del_icon.png' width='25'></a></td>";
-            $output .=     "<td><a href='edit.php?id=" . $client->getId() . "'><img src='img/edit_icon.png' width='25'></a></td>";
+        foreach ($this->workers as $worker) {
+            $output .= "<td> <img src='img/photo/".$worker->getPicture()."' width='50'> </td>";
+            $output .= "<td>".$worker->getName()."</td>";
+            $output .= "<td> Frontend <small class='d-block'>".$worker->getAbout()."</small> </td>";
+            $output .= "<td>";
+            $output .= "<div class='rating_container'> <a href='ratingUpdate.php?id=".$worker->getId()."&rating=1'><img src='img/star_up.png'";
+            $output .= "width='10'></a><a href='ratingUpdate.php?id=".$worker->getId()."&rating=2'><img src='img/star_up.png'";
+            $output .= "width='10'></a><a href='ratingUpdate.php?id=".$worker->getId()."&rating=3'><img src='img/star_up.png'";
+            $output .= "width='10'></a><a href='ratingUpdate.php?id=".$worker->getId()."&rating=4'><img src='img/star_down.png'";
+            $output .= "width='10'></a><a href='ratingUpdate.php?id=".$worker->getId()."&rating=5'><img src='img/star_down.png'";
+            $output .= "width='10'></a> </div>";
+            $output .= "</td>";
+            $output .= "<td><a href='card.php?id=".$worker->getId()."' class='more'>+Info</a></td>";
             $output .= "</tr>";
         }
         return $output;
@@ -97,54 +103,4 @@ class Rating extends Connection
         return $stmt->rowCount();
     }
 
-    // WIP 1pto
-    function getSkillsList($id)
-    {
-        $sql = "SELECT w.ID, w.NAME, s.SKILL FROM worker AS w
-        LEFT JOIN skills_worker AS sw ON w.ID = sw.id_worker
-        LEFT JOIN SKILLS AS s ON sw.id_skills = s.ID
-        WHERE w.ID = :id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        if ($stmt->execute() && $stmt->rowCount() > 0) {
-            $skillsWorker = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $skillsWorker;
-        }
-    }
-
-    // WIP 1pto
-    function getLanguageList($id)
-    {
-        $sql = "SELECT w.ID, w.NAME, l.language, l.icon FROM worker AS w
-        LEFT JOIN language_worker AS lw ON w.ID = lw.id_worker
-        LEFT JOIN language AS l ON lw.id_language = l.ID
-        WHERE w.ID = :id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        if ($stmt->execute() && $stmt->rowCount() > 0) {
-            $languageWorker = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $languageWorker;
-        }
-    }
-
-    // WIP 1pto
-    function getCountryName($id)
-    {
-        $sql = "SELECT c.country FROM worker AS w
-        LEFT JOIN country AS c ON w.COUNTRY = c.ID
-        WHERE w.ID = :id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        $countryName = $stmt->fetchColumn();
-        return $countryName;
-    }
-
-
-
-    /* GETTTERS */
-    function getWorkers()
-    {
-        return $this->workers;
-    }
 }

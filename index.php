@@ -1,7 +1,7 @@
 <?php 
 require_once("./autoload.php");
 
-$conexión = new Connection();
+$worker = new Worker(1);
 
 $rating = new Rating();
 
@@ -11,17 +11,8 @@ print_r($rating->getWorkers()); */
 // print_r($rating->getWorker(1));
 
 /* echo "<pre>";
-print_r($rating->getSkillsList(4));
+print_r($worker->getSkillsList(4));
 echo "</pre>"; */
-
-/* echo "<pre>";
-print_r($rating->getLanguageList(2));
-echo "</pre>"; */
-
-echo "<pre>";
-print_r($rating->getCountryName(2));
-echo "</pre>";
-
 
 ?>
 
@@ -61,7 +52,6 @@ echo "</pre>";
         <table class="table table-striped custom-table">
           <thead>
             <tr>
-
               <th scope="col">&nbsp;</th>
               <th scope="col">Name</th>
               <th scope="col">Skills</th>
@@ -70,7 +60,7 @@ echo "</pre>";
             </tr>
           </thead>
           <tbody>
-            <tr scope='row'>
+            <!-- <tr scope='row'>
               <td> <img src='img/photo/hop1.jpg' width='50'> </td>
               <td>Hopper, Xavier P.</td>
               <td> Frontend <small class='d-block'>Sed diam lorem, auctor quis, tristique ac, eleifen...</small> </td>
@@ -83,7 +73,14 @@ echo "</pre>";
                       width='10'></a> </div>
               </td>
               <td><a href='card.php?id=1' class='more'>+Info</a></td>
-            </tr>
+            </tr> -->
+            <?php 
+            $rating->getAllWorkers();
+           /*  echo "<pre>";
+            print_r($rating->getWorkers());
+            echo "</pre>"; */
+            print_r($rating->drawWorkersList()); 
+            ?>  
           </tbody>
         </table>
       </div>
